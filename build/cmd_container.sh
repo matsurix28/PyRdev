@@ -2,7 +2,7 @@
 
 export PATH="$PATH:/home/docker/workspace/build/bin"
 
-echo $PASSWORD | sudo -S chown -R $${USERID}:${GROUPID} /home/docker/workspace
+echo $PASSWORD | sudo -S chown -R ${USERID}:${GROUPID} /home/docker/workspace
 umask 0002
 
 while read line
