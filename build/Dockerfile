@@ -41,6 +41,4 @@ RUN mkdir -p /home/docker/.cache/R/renv /home/docker/library
 
 WORKDIR /home/docker/workspace
 
-CMD echo ${PASSWORD} | sudo -S chown -R ${USERID}:${GROUPID} /home/docker/workspace \
-    && umask 0002 \
-    && bash /home/docker/workspace/build/container.sh
+CMD bash /home/docker/workspace/build/build_container.sh
