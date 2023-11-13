@@ -1,11 +1,11 @@
 {
-    "name": "R for VSCode",
+    "name": "Deveropment environment for VSCode",
 
     "dockerComposeFile": [
         "../docker-compose.yml"
     ],
 
-    "service": "r",
+    "service": "dev",
 
     "workspaceFolder": "/home/docker/workspace",
 
@@ -18,8 +18,18 @@
                 "REditorSupport.r",
                 "mhutchie.git-graph",
                 "donjayamanne.githistory",
-                "eamodio.gitlens"
-            ]
+                "eamodio.gitlens",
+                "ms-python.python",
+                "ms-python.isort"
+            ],
+            "settings": {
+                "r.lsp.promptToInstall": false,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": true
+                },
+                "python.pythonPath": "/home/docker/.venv/bin/python",
+                "python.defaultInterpreterPath": "/home/docker/.venv/bin/python"
+            }
         }
     }
 }

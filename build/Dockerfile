@@ -22,6 +22,7 @@ RUN apt-get update \
     && apt-get install --no-install-recommends -y sudo \
     expat \
     git \
+    libxml2-dev \
     && apt-get clean \
     && GROUP=`grep -E "^[^:]+:[^:]+:${GID}:" /etc/group` || true \
     && if [ -z "${GROUP}" ]; then groupadd -g ${GID} container-group; fi \

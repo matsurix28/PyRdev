@@ -1,5 +1,5 @@
 services:
-  r:
+  dev:
     build: 
       context: .
       dockerfile: ./build/Dockerfile

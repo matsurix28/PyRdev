@@ -1,9 +1,9 @@
 #!/bin/bash
 
-export PATH="$PATH:/home/docker/workspace/build/bin"
-
 echo $PASSWORD | sudo -S chown -R ${USERID}:${GROUPID} /home/docker/workspace
 umask 0002
+
+cp /home/docker/workspace/build/.bashrc /home/docker/
 
 while read line
 do
