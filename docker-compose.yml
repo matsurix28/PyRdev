@@ -2,7 +2,7 @@ services:
   dev:
     build: 
       context: .
-      dockerfile: ./build/Dockerfile
+      dockerfile: ./.build/Dockerfile
       args:
         - GID=${GID:-1000}
         - UID=${UID:-1000}

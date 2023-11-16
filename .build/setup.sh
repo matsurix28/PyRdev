@@ -96,9 +96,9 @@ done
 ProjDir=$PARENT/$ProjName
 cp -r $ROOT $ProjDir
 rm -rf $ProjDir/.git $ProjDir/README.md
-mv $ProjDir/build/README.md $ProjDir/
-sed -i "s/FROM r-base.*$/FROM r-base:$R_VER/" $ProjDir/build/Dockerfile
-sed -i "s/FROM python.*$/FROM python:$PY_VER as python/" $ProjDir/build/Dockerfile
+mv $ProjDir/.build/after/README.md $ProjDir/README.md
+sed -i "s/FROM r-base.*$/FROM r-base:$R_VER/" $ProjDir/.build/Dockerfile
+sed -i "s/FROM python.*$/FROM python:$PY_VER as python/" $ProjDir/.build/Dockerfile
 
 # Generate .env file
 echo "Setting UID, GID and Project name."
@@ -119,8 +119,8 @@ cd $ProjDir
 echo "Compose up."
 echo "Initializing renv..."
 docker compose up
-docker container rm ${ProjName,,}-r-1
-docker rmi ${ProjName,,}-r
+docker container rm ${ProjName,,}-dev-1
+docker rmi ${ProjName,,}-dev
 if "$ROOTLESS"; then
   sudo chmod -R g+w $ProjDir
 fi

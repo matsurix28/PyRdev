@@ -11,4 +11,4 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-export PATH="$PATH:/home/docker/workspace/build/bin"
+export PATH="$PATH:/home/docker/workspace/.build/bin"

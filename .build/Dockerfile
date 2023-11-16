@@ -20,7 +20,6 @@ ENV PYTHON_VER ${PY_VER}
 
 RUN apt-get update \
     && apt-get install --no-install-recommends -y sudo \
-    expat \
     git \
     libxml2-dev \
     && apt-get clean \
@@ -42,4 +41,4 @@ RUN mkdir -p /home/docker/.cache/R/renv /home/docker/library
 
 WORKDIR /home/docker/workspace
 
-CMD bash /home/docker/workspace/build/build_container.sh
+CMD bash /home/docker/workspace/.build/container.sh
