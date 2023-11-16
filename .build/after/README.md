@@ -1,5 +1,4 @@
-# Usage
+## Quick Start
 ```
-git clone PROJECT_REPOSITORY; bash PROJECT/build/start.sh
+git clone [YOUR_GITHUB_ACCOUNT]/[PROJECT_REPOSITORY]; bash [PROJECT_REPOSITORY]/.build/setup.sh
 ```
-Set UID, GID and Project name, and install required R packages.
