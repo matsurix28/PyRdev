@@ -29,22 +29,6 @@ fi
 ROOT=$(cd $(dirname $0)/..; pwd)
 PARENT=$(cd $(dirname $0)/../..; pwd)
 
-# Set R version
-FIRST=true
-read -p "Enter R vsersion (default: latest): " R_VER
-
-while true; do
-  if ! "$FIRST"; then
-    echo "Error, couldn't pull r-base:$R_VER. "
-    read -p "Retype R version: " R_VER
-  fi
-  FIRST=false
-  if [[ "$R_VER" == "" ]]; then
-    R_VER="latest"
-  fi
-  docker pull r-base:$R_VER && break
-done
-
 # Set Python version
 FIRST=true
 read -p "Enter Python vsersion (default: latest): " PY_VER
@@ -59,6 +43,22 @@ while true; do
     PY_VER="latest"
   fi
   docker pull python:$PY_VER && break
+done
+
+# Set R version
+FIRST=true
+read -p "Enter R vsersion (default: latest): " R_VER
+
+while true; do
+  if ! "$FIRST"; then
+    echo "Error, couldn't pull r-base:$R_VER. "
+    read -p "Retype R version: " R_VER
+  fi
+  FIRST=false
+  if [[ "$R_VER" == "" ]]; then
+    R_VER="latest"
+  fi
+  docker pull r-base:$R_VER && break
 done
 
 # Set Project name
