@@ -19,8 +19,10 @@ ENV PASSWORD ${PSWD}
 ENV PYTHON_VER ${PY_VER}
 
 RUN apt-get update \
-    && apt-get install --no-install-recommends -y sudo \
+    && apt-get install --no-install-recommends -y \
+    sudo \
     git \
+    openssh-server \
     libxml2-dev \
     && apt-get clean \
     && GROUP=`grep -E "^[^:]+:[^:]+:${GID}:" /etc/group` || true \
