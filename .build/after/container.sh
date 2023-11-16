@@ -1,15 +1,15 @@
 #!/bin/bash
 
-echo $PASSWORD | sudo -S chown -R ${USERID}:${GROUPID} /home/docker/workspace
+echo $PASSWORD | sudo -S chown -R ${USERID}:${GROUPID} ~/workspace
 umask 0002
 
-cp /home/docker/workspace/.build/.bashrc /home/docker/
+ln -s ~/workspace/.build/.bashrc ~/.bashrc
 
 while read line
 do
     apt-get install -y $line
-done < /home/docker/workspace/.build/apt_packages.txt
+done < ~/workspace/.build/apt_packages.txt
 
-R -e "renv::restore()"
+R -q -e "renv::restore()"
 pipenv sync
 pipenv shell

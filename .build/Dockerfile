@@ -37,8 +37,8 @@ COPY --from=python /usr/local/include /usr/local/include
 
 USER docker
 
-RUN mkdir -p /home/docker/.cache/R/renv /home/docker/library
+RUN mkdir -p ~/.cache/R/renv ~/library
 
 WORKDIR /home/docker/workspace
 
-CMD bash /home/docker/workspace/.build/container.sh
+CMD bash ~/workspace/.build/container.sh

@@ -1,20 +1,21 @@
 #!/bin/bash
 
-echo $PASSWORD | sudo -S chown -R ${USERID}:${GROUPID} /home/docker/workspace
+echo $PASSWORD | sudo -S chown -R ${USERID}:${GROUPID} ~/workspace
 umask 0002
-chmod +x /home/docker/workspace/.build/cmd/*
+chmod +x ~/workspace/.build/cmd/*
 
-mkdir -p /home/docker/workspace/.build/bin
-ln -s /home/docker/workspace/.build/cmd/save.sh /home/docker/workspace/.build/bin/save
+mkdir -p ~/workspace/.build/bin
+ln -s ~/workspace/.build/cmd/save.sh ~/workspace/.build/bin/save
 
-R -e "install.packages('renv', lib='/home/docker/library'); .libPaths('/home/docker/library'); renv::init()"
+R -q -e "install.packages('renv', lib='~/library'); .libPaths('~/library'); renv::init()"
+rm -rf ~/library
 
 export PIPENV_VENV_IN_PROJECT=1
 pipenv --python $PYTHON_VER
 pipenv lock
 
-rm /home/docker/workspace/.build/container.sh /home/docker/workspace/.build/setup.sh
-mv /home/docker/workspace/.build/after/* /home/docker/workspace/.build/
-rm -r /home/docker/workspace/.build/after
+rm ~/workspace/.build/container.sh ~/workspace/.build/setup.sh
+mv ~/workspace/.build/after/* ~/workspace/.build/
+rm -r ~/workspace/.build/after
 git init
 exit
