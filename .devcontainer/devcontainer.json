@@ -27,8 +27,8 @@
                 "editor.codeActionsOnSave": {
                     "source.organizeImports": true
                 },
-                "python.pythonPath": "/home/docker/.venv/bin/python",
-                "python.defaultInterpreterPath": "/home/docker/.venv/bin/python"
+                "python.pythonPath": "/home/docker/workspace/.venv/bin/python",
+                "python.defaultInterpreterPath": "/home/docker/workspace/.venv/bin/python"
             }
         }
     }
