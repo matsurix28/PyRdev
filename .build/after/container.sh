@@ -11,5 +11,7 @@ do
 done < ~/workspace/.build/apt_packages.txt
 
 R -q -e "renv::restore()"
+export PIPENV_VENV_IN_PROJECT=1
+pipenv --python $PYTHON_VER
 pipenv sync
 pipenv shell
