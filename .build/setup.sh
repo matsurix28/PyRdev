@@ -42,7 +42,7 @@ while true; do
   if [[ "$PY_VER" == "" ]]; then
     PY_VER="latest"
   fi
-  docker pull python:$PY_VER && break
+  docker pull -q python:$PY_VER && break
 done
 
 # Set R version
@@ -58,7 +58,7 @@ while true; do
   if [[ "$R_VER" == "" ]]; then
     R_VER="latest"
   fi
-  docker pull r-base:$R_VER && break
+  docker pull -q r-base:$R_VER && break
 done
 
 # Set Project name
