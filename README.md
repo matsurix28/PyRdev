@@ -4,7 +4,7 @@ This is template repository to make Python and R development envrironment on doc
 
 ## Quick start
 ```
-git clone https://github.com/matsurix28/PyR.git; bash ./PyRdev/.build/setup.sh
+git clone https://github.com/matsurix28/PyRdev.git; bash ./PyRdev/.build/setup.sh
 ```
 If you are using rootless mode, restart the shell to reflect the addition of the group.
 
