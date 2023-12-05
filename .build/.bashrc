@@ -14,3 +14,5 @@ fi
 export PATH="$PATH:~/workspace/.build/bin"
 
 export HISTFILE=~/workspace/.bash_history
+
+alias apt='/home/docker/workspace/.build/cmd/apt_install.sh'
