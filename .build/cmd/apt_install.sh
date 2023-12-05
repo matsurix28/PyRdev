@@ -3,7 +3,7 @@
 for arg in $@; do
   if [[ ! $arg =~ ^-.*$ ]]; then
     if [[ "$arg" == "install" ]]; then
-      /usr/bin/apt-get -d $@ && cp /var/cache/apt/archives/*.deb ~/workspace/.build/debs/ && apt-get -y $@
+      sudo /usr/bin/apt-get -d $@ && cp /var/cache/apt/archives/*.deb /home/docker/workspace/.build/debs/ && sudo apt-get -y $@
       exit
     else
       break
@@ -11,4 +11,4 @@ for arg in $@; do
   fi
 done
 
-/usr/bin/apt $@
+sudo /usr/bin/apt-cmd $@
