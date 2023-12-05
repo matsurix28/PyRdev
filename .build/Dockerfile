@@ -6,8 +6,7 @@ RUN pip install -U pip \
     && pip install pipenv \
     isort
 
-FROM r-base:latest
-
+FROM ubuntu:22.04
 ARG UID=1000
 ARG GID=1000
 ARG PSWD=pswd
@@ -27,11 +26,20 @@ RUN apt-get update \
     && apt-get clean \
     && GROUP=`grep -E "^[^:]+:[^:]+:${GID}:" /etc/group` || true \
     && if [ -z "${GROUP}" ]; then groupadd -g ${GID} container-group; fi \
-    && usermod -u ${UID} -g ${GID} docker \
+    && useradd -u ${UID} -g ${GID} docker \
+    && mkdir /home/docker \
+    && chown -R ${UID}:${GID} /home/docker \
     && gpasswd -a docker sudo \
     && echo "docker ALL=(ALL) ALL" >> /etc/sudoers \
     && echo "docker:${PSWD}" | chpasswd \
-    && rm /var/log/apt/history.log
+    && rm /var/log/apt/history.log \
+    && apt-get install --no-install-recommends -y software-properties-common dirmngr wget make build-essential\
+    && wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc \
+    && add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/" -y \
+    && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get install --no-install-recommends -y r-base \
+    && apt-get install --no-install-recommends --allow-downgrades -y r-base-core=4.2.1-3.2204.0 \
+    && apt-get clean
 
 COPY --from=python /usr/local/bin /usr/local/bin
 COPY --from=python /usr/local/lib /usr/local/lib
