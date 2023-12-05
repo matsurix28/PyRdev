@@ -4,6 +4,7 @@ echo $PASSWORD | sudo -S chown -R ${USERID}:${GROUPID} ~/workspace
 umask 0002
 chmod +x ~/workspace/.build/cmd/*
 
+mkdir -p ~/workspace/.build/debs
 mkdir -p ~/workspace/.build/bin
 ln -s ~/workspace/.build/cmd/save.sh ~/workspace/.build/bin/save
 
