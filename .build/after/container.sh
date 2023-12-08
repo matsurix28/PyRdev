@@ -5,7 +5,7 @@ umask 0002
 
 ln -s ~/workspace/.build/.bashrc ~/.bashrc
 ln -s ~/workspace/.build/cmd/save.sh ~/workspace/.build/bin/save
-sudo ln -s /home/docker/workspace/.build/cmd/apt_install.sh /usr/bin/apt
+ln -s ~/workspace/.build/cmd/apt_install.sh ~/workspace/.build/bin/apt
 
 sudo mv /etc/apt /etc/apt.bak
 sudo apt-get install --allow-downgrades -y /home/docker/workspace/.build/debs/*.deb
