@@ -17,20 +17,11 @@ ENV GROUPID ${GID}
 ENV PASSWORD ${PSWD}
 ENV PYTHON_VER ${PY_VER}
 
+COPY ./.build/debs /debs
+
 RUN apt-get update \
-    && apt-get install --no-install-recommends -d -y \
-    sudo \
-    git \
-    openssh-server \
-    libxml2-dev \
-    software-properties-common \
-    dirmngr \
-    wget \
-    make \
-    build-essential \
-    && mkdir /debs \
-    && mv /var/cache/apt/archives/*.deb /debs/ \
-    && apt-get install -y /debs/*.deb \
+    && export DEBIAN_FRONTEND=noninteractive \
+    && apt install -y /debs/*.deb \
     && GROUP=`grep -E "^[^:]+:[^:]+:${GID}:" /etc/group` || true \
     && if [ -z "${GROUP}" ]; then groupadd -g ${GID} container-group; fi \
     && useradd -u ${UID} -g ${GID} docker \
@@ -39,19 +30,8 @@ RUN apt-get update \
     && gpasswd -a docker sudo \
     && echo "docker ALL=(ALL) ALL" >> /etc/sudoers \
     && echo "docker:${PSWD}" | chpasswd \
-    && wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc \
-    && add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/" -y \
-    && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get install --no-install-recommends -d -y r-base \
-    && mv /var/cache/apt/archives/*.deb /debs/ \
-    && apt-get install --no-install-recommends -y r-base \
-    && rm /debs/r-base-core* \
-    && apt-get install --no-install-recommends --allow-downgrades -d -y r-base-core=4.2.1-3.2204.0 \
-    && mv /var/cache/apt/archives/*.deb /debs/ \
-    && apt-get install --no-install-recommends --allow-downgrades -y r-base-core=4.2.1-3.2204.0 \
-    && apt-mark hold r-base-core \
     && mv /usr/bin/apt /usr/bin/apt-cmd \
-    && rm /var/log/apt/history.log \
+    && rm -rf /var/log/apt/history.log /debs \
     && apt-get clean
 
 COPY --from=python /usr/local/bin /usr/local/bin

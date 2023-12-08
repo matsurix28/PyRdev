@@ -3,7 +3,8 @@
 echo $PASSWORD | sudo -S chown -R ${USERID}:${GROUPID} ~/workspace
 umask 0002
 chmod +x ~/workspace/.build/cmd/*
-sudo mv /debs /home/docker/workspace/.debs
+mkdir -p ~/workspace/.build/debs
+sudo mv /debs /home/docker/workspace/.build/debs
 
 mkdir -p ~/workspace/.build/bin
 
