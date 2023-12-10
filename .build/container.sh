@@ -4,9 +4,11 @@ echo $PASSWORD | sudo -S chown -R ${USERID}:${GROUPID} ~/workspace
 umask 0002
 chmod +x ~/workspace/.build/cmd/*
 mkdir -p ~/workspace/.build/debs
-sudo mv /debs /home/docker/workspace/.build/debs
+mv ~/debs ~/workspace/.build/
 
 mkdir -p ~/workspace/.build/bin
+
+bash ~/workspace/.build/cmd/save.sh
 
 R -q -e "install.packages('renv', lib='~/library'); .libPaths('~/library'); renv::init()"
 rm -rf ~/library

@@ -28,14 +28,13 @@ RUN apt-get update \
     wget \
     make \
     build-essential \
-    && mkdir /debs \
+    && mkdir -p /debs \
     && mv /var/cache/apt/archives/*.deb /debs/ \
-    && apt-get install -y /debs/*.deb \
+    && apt-get install --no-install-recommends -y /debs/*.deb \
     && GROUP=`grep -E "^[^:]+:[^:]+:${GID}:" /etc/group` || true \
     && if [ -z "${GROUP}" ]; then groupadd -g ${GID} container-group; fi \
     && useradd -u ${UID} -g ${GID} docker \
     && mkdir /home/docker \
-    && chown -R ${UID}:${GID} /home/docker \
     && gpasswd -a docker sudo \
     && echo "docker ALL=(ALL) ALL" >> /etc/sudoers \
     && echo "docker:${PSWD}" | chpasswd \
@@ -44,15 +43,14 @@ RUN apt-get update \
     && export DEBIAN_FRONTEND=noninteractive \
     && apt-get install --no-install-recommends -d -y r-base \
     && mv /var/cache/apt/archives/*.deb /debs/ \
-    && apt-get install --no-install-recommends -y r-base \
-    && rm /debs/r-base-core* \
+    && apt-get install --no-install-recommends -y /debs/*.deb \
     && apt-get install --no-install-recommends --allow-downgrades -d -y r-base-core=4.2.1-3.2204.0 \
-    && mv /var/cache/apt/archives/*.deb /debs/ \
-    && apt-get install --no-install-recommends --allow-downgrades -y r-base-core=4.2.1-3.2204.0 \
+    && cp /var/cache/apt/archives/*.deb /debs/ \
+    && apt-get install --no-install-recommends --allow-downgrades -y /var/cache/apt/archives/*.deb \
     && apt-mark hold r-base-core \
-    && mv /usr/bin/apt /usr/bin/apt-cmd \
-    && rm /var/log/apt/history.log \
-    && apt-get clean
+    && mv /debs /home/docker/ \
+    && chown -R ${UID}:${GID} /home/docker \
+    && apt clean
 
 COPY --from=python /usr/local/bin /usr/local/bin
 COPY --from=python /usr/local/lib /usr/local/lib

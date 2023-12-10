@@ -17,11 +17,13 @@ ENV GROUPID ${GID}
 ENV PASSWORD ${PSWD}
 ENV PYTHON_VER ${PY_VER}
 
-COPY ./.build/debs /debs
+COPY ./.build/debs/ /debs
+COPY --from=python /usr/local/bin /usr/local/bin
+COPY --from=python /usr/local/lib /usr/local/lib
+COPY --from=python /usr/local/include /usr/local/include
 
-RUN apt-get update \
-    && export DEBIAN_FRONTEND=noninteractive \
-    && apt install -y /debs/*.deb \
+RUN export DEBIAN_FRONTEND=noninteractive \
+    && apt install --no-install-recommends -y /debs/*.deb \
     && GROUP=`grep -E "^[^:]+:[^:]+:${GID}:" /etc/group` || true \
     && if [ -z "${GROUP}" ]; then groupadd -g ${GID} container-group; fi \
     && useradd -u ${UID} -g ${GID} docker \
@@ -31,12 +33,8 @@ RUN apt-get update \
     && echo "docker ALL=(ALL) ALL" >> /etc/sudoers \
     && echo "docker:${PSWD}" | chpasswd \
     && mv /usr/bin/apt /usr/bin/apt-cmd \
-    && rm -rf /var/log/apt/history.log /debs \
+    && rm -rf /debs \
     && apt-get clean
-
-COPY --from=python /usr/local/bin /usr/local/bin
-COPY --from=python /usr/local/lib /usr/local/lib
-COPY --from=python /usr/local/include /usr/local/include
 
 USER docker
 

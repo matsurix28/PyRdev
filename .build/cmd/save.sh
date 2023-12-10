@@ -1,18 +1,18 @@
 #!/bin/bash
 
-if [ -f /var/apt/history.log ]; then
-  APTS=`grep "install" /var/log/apt/history.log | sed "s/^.* install //g" | sed -z "s/\n/ /g" | \
-  awk '{for(i=1; i<=NF; i++) {if($i !~ /^-/) {if($i ~ /=/) {print substr($i,1,index($i,"=")-1)} else {print $i}}}}'`
-  dpkg -l $APTS | grep "^ii" | awk '{print $2","$3}' > /home/docker/workspace/.build/apt_packages.csv
-fi
-
-mkdir -p ~/workspace/.build/debs
-
+# Delete unused packages. 
+ls -1 ~/workspace/.build/debs > ~/workspace/.build/debs.list
 while read line; do
-  package=${line%%,*}
-  version=${line##*,}
-  mv ${package}*${version}*.deb ~/workspace/.build/debs/
-done < "~/workspace/.build/apt_packages.csv"
+  package=`echo ${line%%_*} | sed -e 's/%3a/:/g'`
+  version=`echo ${line#*_} | sed -e 's/_.*//g' -e 's/%3a/:/g'`
+  if ! dpkg -l $package 2>&1 | grep -e "^ii" -e "^hi" | grep -q "$version" > /dev/null 2>&1; then
+    rm ~/workspace/.build/debs/$line
+  fi
+done < ~/workspace/.build/debs.list
 
+# Make list of installed packages.
+dpkg -l | grep "^ii" | awk '{print $2"="$3}' > ~/workspace/.build/installed_packages.list
+
+# Lock R packages.
 cd ~/workspace
 R -q -e "renv::install(); renv::snapshot()"
