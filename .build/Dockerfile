@@ -11,6 +11,7 @@ ARG UID=1000
 ARG GID=1000
 ARG PSWD=pswd
 ARG PY_VER=3
+ARG R_VER=4.3.2
 
 ENV USERID ${UID}
 ENV GROUPID ${GID}
@@ -44,7 +45,8 @@ RUN apt-get update \
     && apt-get install --no-install-recommends -d -y r-base \
     && mv /var/cache/apt/archives/*.deb /debs/ \
     && apt-get install --no-install-recommends -y /debs/*.deb \
-    && apt-get install --no-install-recommends --allow-downgrades -d -y r-base-core=4.2.1-3.2204.0 \
+    && Rlang_ver=`apt-cache madison r-base-core | grep $R_VER |  awk -F '\|' 'NR==1 {print $2}' | sed 's/ //g'` \
+    && apt-get install --no-install-recommends --allow-downgrades -d -y r-base-core=$Rlang_ver \
     && cp /var/cache/apt/archives/*.deb /debs/ \
     && apt-get install --no-install-recommends --allow-downgrades -y /var/cache/apt/archives/*.deb \
     && apt-mark hold r-base-core \

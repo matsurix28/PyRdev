@@ -1,5 +1,7 @@
 #!/bin/bash
 
+Ubuntu_ver=22.04
+
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 
@@ -28,6 +30,22 @@ fi
 
 ROOT=$(cd $(dirname $0)/..; pwd)
 PARENT=$(cd $(dirname $0)/../..; pwd)
+
+# Set Ubuntu version
+FIRST=true
+read -p "Enter Ubuntu vsersion (default: $Ubuntu_ver): " UBU_VER
+
+while true; do
+  if ! "$FIRST"; then
+    echo "Error, couldn't pull ubuntu:$UBU_VER. "
+    read -p "Retype Ubuntu version: " UBU_VER
+  fi
+  FIRST=false
+  if [[ "$UBU_VER" == "" ]]; then
+    UBU_VER="$Ubuntu_ver"
+  fi
+  docker pull -q ubuntu:$UBU_VER && break
+done
 
 # Set Python version
 FIRST=true
@@ -97,6 +115,7 @@ ProjDir=$PARENT/$ProjName
 cp -r $ROOT $ProjDir
 rm -rf $ProjDir/.git $ProjDir/README.md
 mv $ProjDir/.build/after/README.md $ProjDir/README.md
+sed -i"" -e "s/FROM ubuntu.*$/FROM ubuntu:$UBU_VER/" $ProjDir/.build/Dockerfile
 sed -i"" -e "s/FROM python.*$/FROM python:$PY_VER as python/" $ProjDir/.build/Dockerfile
 sed -i"" -e "s/FROM python.*$/FROM python:$PY_VER as python/" $ProjDir/.build/after/Dockerfile
 
@@ -106,13 +125,13 @@ echo "UID=$USER_ID" > $ProjDir/.env
 echo "GID=$GROUP_ID" >> $ProjDir/.env
 echo "COMPOSE_PROJECT_NAME=${ProjName,,}" >> $ProjDir/.env
 echo "PY_VER=$PY_VER" >> $ProjDir/.env
+echo "R_VER=$R_VER" >> $ProjDir/.env
 
 # Initial setting
 if [ -z "$(docker volume ls -q -f name='renv')" ]; then
   echo "Create renv volume."
   docker volume create renv
 fi
-
 
 # Start docker container
 cd $ProjDir
@@ -121,6 +140,7 @@ echo "Initializing renv..."
 docker compose up
 docker container rm ${ProjName,,}-dev-1
 docker rmi ${ProjName,,}-dev
+echo "Add write permission to working directory."
 if "$ROOTLESS"; then
   sudo chmod -R g+w $ProjDir
 fi

@@ -10,12 +10,10 @@ FROM ubuntu:22.04
 ARG UID=1000
 ARG GID=1000
 ARG PSWD=pswd
-ARG PY_VER=3
 
 ENV USERID ${UID}
 ENV GROUPID ${GID}
 ENV PASSWORD ${PSWD}
-ENV PYTHON_VER ${PY_VER}
 
 COPY ./.build/debs/ /debs
 COPY --from=python /usr/local/bin /usr/local/bin
@@ -24,22 +22,24 @@ COPY --from=python /usr/local/include /usr/local/include
 
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt install --no-install-recommends -y /debs/*.deb \
+    && rm -rf /debs \
     && GROUP=`grep -E "^[^:]+:[^:]+:${GID}:" /etc/group` || true \
     && if [ -z "${GROUP}" ]; then groupadd -g ${GID} container-group; fi \
     && useradd -u ${UID} -g ${GID} docker \
     && mkdir /home/docker \
-    && chown -R ${UID}:${GID} /home/docker \
     && gpasswd -a docker sudo \
     && echo "docker ALL=(ALL) ALL" >> /etc/sudoers \
     && echo "docker:${PSWD}" | chpasswd \
     && mv /usr/bin/apt /usr/bin/apt-cmd \
-    && rm -rf /debs \
-    && apt-get clean
+    && mkdir -p /home/docker/workspace/.build/bin \
+    && ln -s /home/docker/workspace/.build/.bashrc /home/docker/.bashrc \
+    && ln -s /home/docker/workspace/.build/cmd/save.sh /usr/bin/save \
+    && ln -s /home/docker/workspace/.build/cmd/apt_install.sh /usr/bin/apt \
+    && ln -s /home/docker/workspace/.build/cmd/sync-env.sh /usr/bin/sync-env \
+    && chown -R ${UID}:${GID} /home/docker    
 
 USER docker
 
-RUN mkdir -p ~/.cache/R/renv ~/library
-
 WORKDIR /home/docker/workspace
 
-CMD bash ~/workspace/.build/container.sh
+CMD bash /home/docker/workspace/.build/container.sh

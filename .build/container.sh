@@ -6,8 +6,6 @@ chmod +x ~/workspace/.build/cmd/*
 mkdir -p ~/workspace/.build/debs
 mv ~/debs ~/workspace/.build/
 
-mkdir -p ~/workspace/.build/bin
-
 bash ~/workspace/.build/cmd/save.sh
 
 R -q -e "install.packages('renv', lib='~/library'); .libPaths('~/library'); renv::init()"
