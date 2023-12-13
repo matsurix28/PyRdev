@@ -6,6 +6,8 @@ services:
       args:
         - GID=${GID:-1000}
         - UID=${UID:-1000}
+        - PY_VER=${PY_VER:-3}
+        - R_VER=${R_VER:-4.3.2}
     tty: true
     stdin_open: true
     volumes:
