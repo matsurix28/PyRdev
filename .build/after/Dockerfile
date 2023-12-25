@@ -34,7 +34,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && mkdir -p /home/docker/workspace/.build/bin \
     && ln -s /home/docker/workspace/.build/.bashrc /home/docker/.bashrc \
     && ln -s /home/docker/workspace/.build/cmd/save.sh /usr/bin/save \
-    && ln -s /home/docker/workspace/.build/cmd/apt_install.sh /usr/bin/apt \
+    && ln -s /home/docker/workspace/.build/cmd/apt-install.sh /usr/bin/apt \
     && ln -s /home/docker/workspace/.build/cmd/sync-env.sh /usr/bin/sync-env \
     && chown -R ${UID}:${GID} /home/docker    
 
